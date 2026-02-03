@@ -18,10 +18,10 @@ export class Player {
     window.addEventListener("keyup", (e) => this.keys[e.code] = false)
   }
 
-  update(canvas) {
+  update(canvas, platforms = []) {
     // Détecter si le joueur rampe
     if (this.keys["ArrowDown"]) {
-      if (!this.crawling) {
+      if (!this.crawling && this.grounded) {
         this.crawling = true
         this.y += this.normalHeight - this.crawlHeight // garder les pieds au même endroit
         this.height = this.crawlHeight
@@ -47,12 +47,14 @@ export class Player {
     this.velocityY += this.gravity
     this.y += this.velocityY
 
-    // Collision avec le sol
-    if (this.y + this.height > canvas.height) {
-      this.y = canvas.height - this.height
-      this.velocityY = 0
-      this.grounded = true
-    }
+// Collision plateformes
+    platforms.forEach(p => {
+      if (p.checkCollision(this)) {
+        this.y = p.y - this.height
+        this.velocityY = 0
+        this.grounded = true
+      }
+    })
 
     // Limites gauche/droite
     if (this.x < 0) this.x = 0

@@ -1,5 +1,6 @@
 import { Player } from "./entities/Player.js"
 import { Food } from "./entities/Food.js"
+import { Platform } from "./entities/Platform.js"
 
 const canvas = document.getElementById("gameCanvas")
 const ctx = canvas.getContext("2d")
@@ -23,11 +24,23 @@ const foods = [
   new Food(1700, 360)
 ]
 
+const platforms = [
+  // sol principal
+  new Platform(0, 380, worldWidth, 40),
+
+  // plateformes
+  new Platform(300, 300, 120),
+  new Platform(550, 250, 120),
+  new Platform(850, 280, 150),
+  new Platform(1200, 240, 120)
+]
+
+
 let score = 0
 
 function update() {
   // le joueur est maintenant limité par le monde, pas le canvas
-  player.update({ width: worldWidth, height: canvas.height })
+  player.update({ width: worldWidth, height: canvas.height }, platforms)
 
   // caméra centrée sur le joueur
   cameraX = player.x - canvas.width / 2 + player.width / 2
@@ -52,8 +65,10 @@ function render() {
   ctx.save()
   ctx.translate(-cameraX, 0)
 
-  player.render(ctx)
+  platforms.forEach(p => p.render(ctx))
   foods.forEach(f => f.render(ctx))
+  player.render(ctx)
+
 
   ctx.restore()
 
