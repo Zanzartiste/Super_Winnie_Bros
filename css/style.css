@@ -1,0 +1,28 @@
+/* Corps de page */
+body {
+  margin: 0;
+  background: #222; /* fond sombre pour voir le score */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Canvas */
+canvas {
+  display: block;
+  background: #87ceeb; /* ciel bleu */
+  border: 2px solid #000;
+}
+
+/* Score HTML si tu veux l’utiliser au-dessus du canvas */
+#score {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: yellow;
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 10;
+}
