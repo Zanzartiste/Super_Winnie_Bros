@@ -12,7 +12,9 @@ const worldWidth = 2000
 let cameraX = 0
 
 // --- Joueur ---
-const player = new Player(50, 300)
+const spawnPoint = { x: 50, y: 300 }
+const player = new Player(spawnPoint.x, spawnPoint.y)
+
 
 // --- Objets à ramasser ---
 const foods = [
@@ -25,8 +27,11 @@ const foods = [
 ]
 
 const platforms = [
-  // sol principal
-  new Platform(0, 380, worldWidth, 40),
+  // sol gauche
+  new Platform(0, 380, 700, 40),
+
+  // sol droite (trou au milieu)
+  new Platform(900, 380, worldWidth - 900, 40),
 
   // plateformes
   new Platform(300, 300, 120),
@@ -34,6 +39,7 @@ const platforms = [
   new Platform(850, 280, 150),
   new Platform(1200, 240, 120)
 ]
+
 
 
 let score = 0
@@ -56,7 +62,19 @@ function update() {
       score += 1
     }
   })
+  
+  if (player.y > canvas.height + 200) {
+    respawn()
+  }
 }
+
+
+function respawn() {
+  player.x = spawnPoint.x
+  player.y = spawnPoint.y
+  player.velocityY = 0
+}
+
 
 function render() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
