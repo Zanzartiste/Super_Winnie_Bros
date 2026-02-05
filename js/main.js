@@ -2,6 +2,7 @@ import { Player } from "./entities/Player.js"
 import { Food } from "./entities/Food.js"
 import { Platform } from "./entities/Platform.js"
 import { Hazard } from "./entities/Hazard.js"
+import { Checkpoint } from "./entities/Checkpoint.js"
 
 
 let death = 0
@@ -16,7 +17,7 @@ const worldWidth = 2000
 let cameraX = 0
 
 // --- Joueur ---
-const spawnPoint = { x: 50, y: 300 }
+let spawnPoint = { x: 50, y: 300 }
 const player = new Player(spawnPoint.x, spawnPoint.y)
 
 
@@ -48,6 +49,10 @@ const hazards = [
   new Hazard(950, 370, 150, 10) // au fond du trou
 ]
 
+const checkpoints = [
+  new Checkpoint(500, 320),
+  new Checkpoint(1100, 320)
+]
 
 
 let score = 0
@@ -75,6 +80,14 @@ function update() {
       respawn()
     }
   })
+  checkpoints.forEach(cp => {
+    if (cp.checkCollision(player) && !cp.active) {
+      checkpoints.forEach(c => c.active = false)
+      cp.active = true
+      spawnPoint = { x: cp.x, y: cp.y - player.height }
+    }
+  })
+
 
 
   if (player.y > canvas.height + 200) {
@@ -103,6 +116,7 @@ function render() {
   player.render(ctx)
   hazards.forEach(h => h.render(ctx))
 
+  checkpoints.forEach(cp => cp.render(ctx))
 
 
   ctx.restore()
